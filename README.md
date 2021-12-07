@@ -9,7 +9,7 @@ My task for this project was to work alongside my fellow classmates to build a w
 - [Expired Requests](#expired-requests)
 
 ## Home Page
-![Create GIF](/GIFs/create.gif)
+![Home Page GIF](/GIFs/homePage.gif)
 ### Code
 - [Template](https://github.com/ryanwspears/PythonLiveProject/blob/main/AnimeReviews/AnimeReviews/templates/anime_reviews_create.html)
 - [Form](https://github.com/ryanwspears/PythonLiveProject/blob/main/AnimeReviews/AnimeReviews/forms.py)
@@ -29,7 +29,7 @@ def anime_reviews_create(request):
 ```
 
 ## Calendar Events
-![Edit GIF](/GIFs/edit.gif)
+![Calendar Events GIF](/GIFs/calendarEvents.gif)
 ### Code
 - [Template](https://github.com/ryanwspears/PythonLiveProject/blob/main/AnimeReviews/AnimeReviews/templates/anime_reviews_edit.html)
 - View:
@@ -50,7 +50,7 @@ def anime_reviews_edit(request, pk):
  ```
 
 ## Rental Requests
-![Delete GIF](/GIFs/delete.gif)
+![Rental Requests GIF](/GIFs/rentalRequests.gif)
 ### Code
 - [Template](https://github.com/ryanwspears/PythonLiveProject/blob/main/AnimeReviews/AnimeReviews/templates/anime_reviews_delete.html)
 - View:
@@ -65,7 +65,7 @@ def anime_reviews_delete(request, pk):
  ```
 
 ## Expired Requests
-![Search GIF](/GIFs/search.gif)
+![Expired Requests GIF](/GIFs/expiredRequests.gif)
 ### Code
 - [Template](https://github.com/ryanwspears/PythonLiveProject/blob/main/AnimeReviews/AnimeReviews/templates/anime_reviews_api.html)
 - [Jikan API](https://rapidapi.com/theapiguy/api/jikan1)
