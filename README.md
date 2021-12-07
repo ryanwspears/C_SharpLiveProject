@@ -2,7 +2,8 @@
 Repo for my C# Live Project at The Tech Academy. It utilizes the C# language and the .NET framework. Visual Studio was the IDE that was used.
 
 ## Overview
-My task for this project was to work alongside my fellow classmates to build a website for a Theater in Portland, OR.
+My task for this project was to work alongside my fellow classmates to build a website for a Theater in Portland, OR. I was tasked with designing aand implementing a number of features. The first task was to style the Home Page per the clients request. This was done using simple HTML and CSS. Next, I was to create an entity model for calendar events that could be scheduled, and create the CRUD pages for it. Entity Framework made this a very simple task. After that, I had to link the calendar events to the production class. This was accomplished with a one-to-many relationship between the two classes where one production can have many calendar events. Then I was tasked with redesigning and styling the rental requests page. The previous design had the data displayed in a simple table. My job was to have the data display in an accordion. This one was a bit of a challenge, but was eventually overcome by some quick research. Lastly, I had to implement a way to only show current rental requests until the user clicked a button to show the expired requests. I had a tough time with this one, but like any other challenge it was quickly overcome. The solution was just a matter of using jQuery to handle the button function.
+
 - [Home Page](#home-page)
 - [Calendar Events](#calendar-events)
 - [Rental Requests](#rental-requests)
