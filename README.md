@@ -274,7 +274,7 @@ public class CalendarEventModel
 ## Expired Requests
 ![Expired Requests GIF](/GIFs/expiredRequests.gif)
 ### Code
-```jquery
+```js
 $("#expiredBtn").click(function () {
 
     if ($(".rent-index--current").is(":visible")) {
