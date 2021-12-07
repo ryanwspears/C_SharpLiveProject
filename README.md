@@ -11,42 +11,103 @@ My task for this project was to work alongside my fellow classmates to build a w
 ## Home Page
 ![Home Page GIF](/GIFs/homePage.gif)
 ### Code
-- [Template](https://github.com/ryanwspears/PythonLiveProject/blob/main/AnimeReviews/AnimeReviews/templates/anime_reviews_create.html)
-- [Form](https://github.com/ryanwspears/PythonLiveProject/blob/main/AnimeReviews/AnimeReviews/forms.py)
-- [Model](https://github.com/ryanwspears/PythonLiveProject/blob/main/AnimeReviews/AnimeReviews/models.py)
-- View:
-```cs
-def anime_reviews_create(request):
-    form = NewAnime(request.POST or None)
-    if form.is_valid():
-        form.save()
-        return redirect('anime_reviews_create')
-    else:
-        print(form.errors)
-        form = NewAnime()
-        context = {'form': form}
-    return render(request, 'anime_reviews_create.html', context)
+```css
+@font-face {
+    font-family: "oswald-variablefont_wght";
+    src: url("../webfonts/oswald-variablefont_wght.ttf") format("truetype");
+}
+
+.home-index--homeLogo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  padding-top: 6em;
+  padding-bottom: 8em;
+}
+
+.home-index--donateContainer {
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+
+.home-index--donationBtn {
+  background-color: var(--main-color);
+  border-radius: 8px;
+  width: 10em;
+  height: 3em;
+  border-color: var(--dark-color);
+  color: var(--light-color);
+}
+
+.home-index--donationBtn:hover {
+  background-color: var(--main-color--light);
+  text-decoration: none;
+  color: var(--light-color);
+}
+
+.home-index--sponserLogos {
+  width: 4em;
+}
+
+.home-index--productionPhotos {
+  width: 30em;
+}
+
+.home-index-sectionHeads {
+  padding-top: 2em;
+  font-family: "oswald-variablefont_wght";
+}
+
+.home-index-sectionHeads:after {
+  background: none repeat scroll 0 0 var(--main-color);
+  bottom: -10px;
+  margin-bottom: 1em;
+  content: "";
+  display: block;
+  height: 5px;
+  position: relative;
+  width: 100px;
+}
+
+.home-index--NAYAimage {
+  padding-top: 70em;
+  text-align: center;
+}
 ```
 
 ## Calendar Events
 ![Calendar Events GIF](/GIFs/calendarEvents.gif)
 ### Code
-- [Template](https://github.com/ryanwspears/PythonLiveProject/blob/main/AnimeReviews/AnimeReviews/templates/anime_reviews_edit.html)
-- View:
 ```cs
-def anime_reviews_edit(request, pk):
-    item = get_object_or_404(Anime, pk=pk)
-    form = NewAnime(data=request.POST or None, instance=item)
-    if request.method == 'POST':
-        if form.is_valid():
-            form2 = form.save(commit=False)
-            form2.save()
-            return redirect('anime_reviews_view')
+public class CalendarEventModel
+    {
+        [Key] public int EventId { get; set; }
 
-        else:
-            print(form.errors)
-    else:
-        return render(request, 'anime_reviews_edit.html', {'form': form, 'item': item})
+        public string Title { get; set; }
+
+        [DataType(DataType.Date)]
+        [Display(Name = "StartDate")]
+        public DateTime StartDate { get; set; }
+
+        [DataType(DataType.Date)]
+        [Display(Name = "EndDate")]
+        public DateTime EndDate { get; set; }
+
+        [DataType(DataType.Time)]
+        [Display(Name = "StartTime")]
+        public DateTime? StartTime { get; set; }
+
+        [DataType(DataType.Time)]
+        [Display(Name = "EndTime")]
+        public DateTime? EndTime { get; set; }
+
+        public bool AllDay { get; set; }
+        public int TicketsAvailable { get; set; }
+        public bool IsProduction { get; set; }
+
+        public virtual Production Production { get; set; }
+    }
  ```
 
 ## Rental Requests
@@ -54,55 +115,177 @@ def anime_reviews_edit(request, pk):
 ### Code
 - [Template](https://github.com/ryanwspears/PythonLiveProject/blob/main/AnimeReviews/AnimeReviews/templates/anime_reviews_delete.html)
 - View:
-```cs
-def anime_reviews_delete(request, pk):
-    item = get_object_or_404(Anime, pk=pk)
-    if request.method == 'POST':
-        item.delete()
-        return redirect('anime_reviews_view')
-    context = {'item': item}
-    return render(request, 'anime_reviews_delete.html', context)
+```cshtml
+<div class="rent-index--toggleContainer">
+  <input class="rent-index--toggleBtn" type="button" id="expiredBtn" value="Expired Requests" />
+</div>
+
+<div class="rent-index--accordionContainer">
+  <div class="accordion" id="accordionExample">
+    @foreach (var item in Model.OrderBy(item => item.StartTime.Date).ThenBy(item => item.StartTime.TimeOfDay))
+    {
+      DateTime currentDate = DateTime.Now;
+
+      string startTimeString = Html.DisplayFor(modelItem => item.StartTime).ToString();
+      DateTime startTime = Convert.ToDateTime(startTimeString);
+      TimeSpan diff = startTime.Subtract(currentDate);
+
+      string endTimeString = Html.DisplayFor(modelItem => item.EndTime).ToString();
+      DateTime endTime = Convert.ToDateTime(endTimeString);
+      TimeSpan remainingDiff = endTime.Subtract(currentDate);
+
+      if (endTime.AddDays(7) > currentDate)
+      {
+        <div class="rent-index--current card">
+          <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+              <button class="btn btn-link rent-index--cardBtn" type="button" data-toggle="collapse" data-target="#info-@item.RentalRequestID" aria-expanded="true" aria-controls="collapseOne">
+                <div class="rent-index--headBox">
+                  <div class="rent-index--headDiv">
+                    <p class="rent-index--company">Company: @Html.DisplayFor(modelItem => item.Company)</p>
+                    <p class="rent-index--contact">Contact Person: @Html.DisplayFor(modelItem => item.ContactPerson)</p>
+                  </div>
+                  @if (diff.Days >= 1)
+                  {
+                    <p class="rent-index--timeUntil">Time Until Start: @diff.Days Days</p>
+                  }
+                  else if (diff.Days < 1 && diff.Hours >= 1)
+                  {
+                    <p class="rent-index--timeUntil">Time Until Start: @diff.Hours Hours</p>
+                  }
+                  else if (diff.Days < 1 && diff.Hours < 1 && diff.Minutes >= 1)
+                  {
+                    <p class="rent-index--timeUntil">Time Until Start: @diff.Minutes Minutes</p>
+                  }
+                  else if (remainingDiff.Days >= 1)
+                  {
+                    <p class="rent-index--timeUntil">Time Left: @remainingDiff.Days Days</p>
+                  }
+                  else if (remainingDiff.Days < 1 && remainingDiff.Hours >= 1)
+                  {
+                    <p class="rent-index--timeUntil">Time Left: @remainingDiff.Hours Hours</p>
+                  }
+                  else if (remainingDiff.Days < 1 && remainingDiff.Hours < 1 && remainingDiff.Minutes >= 1)
+                  {
+                    <p class="rent-index--timeUntil">Time Left: @remainingDiff.Minutes Minutes</p>
+                  }
+                  else if (remainingDiff.Days < 1 && remainingDiff.Hours < 1 && remainingDiff.Minutes < 1 && endTime.AddDays(7) > currentDate)
+                  {
+                    <p class="rent-index--timeUntil">Time Left: None</p>
+                  }
+                </div>
+              </button>
+            </h5>
+          </div>
+
+          <div id="info-@item.RentalRequestID" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+              <div class="rent-index--timeBox">
+                <p class="rent-index--startTime">Start Time:<br /> <span class="rent-index--dateTime">@startTime.ToShortTimeString() <br /> @startTime.ToString("MMM") @startTime.Day, @startTime.Year</span></p>
+                <p class="rent-index--endTime">End Time:<br /> <span class="rent-index--dateTime">@endTime.ToShortTimeString() <br /> @endTime.ToString("MMM") @endTime.Day, @endTime.Year</span></p>
+              </div>
+              <div class="rent-index--infoBox">
+                <p class="rent-index--info">Rental Code: @Html.DisplayFor(modelItem => item.RentalCode)</p>
+                <p class="rent-index--info">Project Info: @Html.DisplayFor(modelItem => item.ProjectInfo)</p>
+                <p class="rent-index--info">Accepted: @Html.DisplayFor(modelItem => item.Accepted)</p>
+                <p class="rent-index--info">Contract Signed: @Html.DisplayFor(modelItem => item.ContractSigned)</p>
+
+                @Html.ActionLink("Edit", "Edit", new { id = item.RentalRequestID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.RentalRequestID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.RentalRequestID })
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+      else
+      {
+        <div class="rent-index--expired card" >
+          <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+              <button class="btn btn-link rent-index--cardBtn" type="button" data-toggle="collapse" data-target="#info-@item.RentalRequestID" aria-expanded="true" aria-controls="collapseOne">
+                <div class="rent-index--headBox">
+                  <div class="rent-index--headDiv">
+                    <p class="rent-index--company">Company: @Html.DisplayFor(modelItem => item.Company)</p>
+                    <p class="rent-index--contact">Contact Person: @Html.DisplayFor(modelItem => item.ContactPerson)</p>
+                  </div>
+                  @if (diff.Days >= 1)
+                  {
+                    <p class="rent-index--timeUntil">Time Until Start: @diff.Days Days</p>
+                  }
+                  else if (diff.Days < 1 && diff.Hours >= 1)
+                  {
+                    <p class="rent-index--timeUntil">Time Until Start: @diff.Hours Hours</p>
+                  }
+                  else if (diff.Days < 1 && diff.Hours < 1 && diff.Minutes >= 1)
+                  {
+                    <p class="rent-index--timeUntil">Time Until Start: @diff.Minutes Minutes</p>
+                  }
+                  else if (remainingDiff.Days >= 1)
+                  {
+                    <p class="rent-index--timeUntil">Time Left: @remainingDiff.Days Days</p>
+                  }
+                  else if (remainingDiff.Days < 1 && remainingDiff.Hours >= 1)
+                  {
+                    <p class="rent-index--timeUntil">Time Left: @remainingDiff.Hours Hours</p>
+                  }
+                  else if (remainingDiff.Days < 1 && remainingDiff.Hours < 1 && remainingDiff.Minutes >= 1)
+                  {
+                    <p class="rent-index--timeUntil">Time Left: @remainingDiff.Minutes Minutes</p>
+                  }
+                  else if (remainingDiff.Days < 1 && remainingDiff.Hours < 1 && remainingDiff.Minutes < 1 && endTime.AddDays(7) > currentDate)
+                  {
+                    <p class="rent-index--timeUntil">Time Left: None</p>
+                  }
+                  else if (endTime.AddDays(7) <= currentDate)
+                  {
+                    <p class="rent-index--timeUntil">Expired</p>
+                  }
+                </div>
+              </button>
+            </h5>
+          </div>
+
+          <div id="info-@item.RentalRequestID" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+              <div class="rent-index--timeBox">
+                <p class="rent-index--startTime">Start Time:<br /> <span class="rent-index--dateTime">@startTime.ToShortTimeString() <br /> @startTime.ToString("MMM") @startTime.Day, @startTime.Year</span></p>
+                <p class="rent-index--endTime">End Time:<br /> <span class="rent-index--dateTime">@endTime.ToShortTimeString() <br /> @endTime.ToString("MMM") @endTime.Day, @endTime.Year</span></p>
+              </div>
+              <div class="rent-index--infoBox">
+                <p class="rent-index--info">Rental Code: @Html.DisplayFor(modelItem => item.RentalCode)</p>
+                <p class="rent-index--info">Project Info: @Html.DisplayFor(modelItem => item.ProjectInfo)</p>
+                <p class="rent-index--info">Accepted: @Html.DisplayFor(modelItem => item.Accepted)</p>
+                <p class="rent-index--info">Contract Signed: @Html.DisplayFor(modelItem => item.ContractSigned)</p>
+
+                @Html.ActionLink("Edit", "Edit", new { id = item.RentalRequestID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.RentalRequestID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.RentalRequestID })
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>
  ```
 
 ## Expired Requests
 ![Expired Requests GIF](/GIFs/expiredRequests.gif)
 ### Code
-- [Template](https://github.com/ryanwspears/PythonLiveProject/blob/main/AnimeReviews/AnimeReviews/templates/anime_reviews_api.html)
-- [Jikan API](https://rapidapi.com/theapiguy/api/jikan1)
-- View:
-```cs
-def anime_reviews_api(request):
+```jquery
+$("#expiredBtn").click(function () {
 
-    resultList = []
-
-    if request.method == 'POST':
-        url = "https://jikan1.p.rapidapi.com/search/anime"
-
-        querystring = {"q": request.POST['searchTerm']}
-
-        headers = {
-            'x-rapidapi-host': "jikan1.p.rapidapi.com",
-            'x-rapidapi-key': "daa3c3b9d7mshaa4e1ceb0660c2dp1caa26jsn9495166557eb"
-        }
-
-        response = requests.request("GET", url, headers=headers, params=querystring)
-
-        result = json.loads(response.text)
-
-        for i in result['results']:
-            url = i['url']
-            img_url = i['image_url']
-            title = i['title']
-            resultArray = (url, img_url, title)
-            resultList.append(resultArray)
-
-    context = {
-        'resultList': resultList
+    if ($(".rent-index--current").is(":visible")) {
+        $(".rent-index--current").hide();
+        $(".rent-index--expired").show();
+        $("#expiredBtn").val("Current Requests");
     }
-
-    return render(request, 'anime_reviews_api.html', context)
+    else if ($(".rent-index--expired").is(":visible")) {
+        $(".rent-index--expired").hide();
+        $(".rent-index--current").show();
+        $("#expiredBtn").val("Expired Requests");
+    }
+})
  ```
-
-## Extras
-- [Static Files](https://github.com/ryanwspears/PythonLiveProject/tree/main/AnimeReviews/AnimeReviews/static)
-- [URLs](https://github.com/ryanwspears/PythonLiveProject/blob/main/AnimeReviews/AnimeReviews/urls.py)
