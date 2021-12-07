@@ -114,8 +114,6 @@ public class CalendarEventModel
 ## Rental Requests
 ![Rental Requests GIF](/GIFs/rentalRequests.gif)
 ### Code
-- [Template](https://github.com/ryanwspears/PythonLiveProject/blob/main/AnimeReviews/AnimeReviews/templates/anime_reviews_delete.html)
-- View:
 ```cshtml
 <div class="rent-index--toggleContainer">
   <input class="rent-index--toggleBtn" type="button" id="expiredBtn" value="Expired Requests" />
